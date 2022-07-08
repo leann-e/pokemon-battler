@@ -9,6 +9,7 @@ const {
   Rattata,
   CreatePokeball,
   CreateTrainer,
+  Battle
 } = require("../pokemonBattler");
 
 // const Flareon = new CreatePokemon("Flareon", "fire", 65, 20, "fireblast");
@@ -194,10 +195,179 @@ describe(CreatePokeball, () => {
 });
 
 describe(CreateTrainer, () => {
-  test("CreateTrainer should have multiple ball properties", () => {
+  test("CreateTrainer should have pokebelt property", () => {
     const testTrainer = new CreateTrainer();
-    expect(testTrainer).toHaveProperty("ball1");
-    expect(testTrainer).toHaveProperty("ball4");
-    expect(testTrainer).toHaveProperty("ball6");
+    expect(testTrainer).toHaveProperty("pokebelt");
   });
+
+  test("CreateTrainer should have name property", () => {
+    const testTrainer = new CreateTrainer();
+    expect(testTrainer).toHaveProperty("name");
+  });
+
+  test("CreateTrainer should have name property and a value", () => {
+    const testTrainer = new CreateTrainer("Ash");
+    expect(testTrainer).toHaveProperty("name", "Ash");
+  });
+
+  test("pokebelt will initialise with 6 pokeballs", () => {
+    const testTrainer = new CreateTrainer("Ash");
+    expect(testTrainer.pokebelt).toEqual([
+      { pokemon: 'empty' },
+      { pokemon: 'empty' },
+      { pokemon: 'empty' },
+      { pokemon: 'empty' },
+      { pokemon: 'empty' },
+      { pokemon: 'empty' }
+    ])
+  });
+
+  test("pokebelt will update with a passed pokemon", () => {
+    const Flareon = new FireType("Flareon", 65, 20, "fireblast");
+    const testTrainer = new CreateTrainer("Ash", Flareon)
+    expect(testTrainer.pokebelt).toEqual([
+      { pokemon: Flareon },
+      { pokemon: 'empty' },
+      { pokemon: 'empty' },
+      { pokemon: 'empty' },
+      { pokemon: 'empty' },
+      { pokemon: 'empty' }
+    ])
+  })
+
+  test("pokebelt will update with a passed pokemon", () => {
+    const Flareon = new FireType("Flareon", 65, 20, "fireblast");
+    const Vaporeon = new WaterType("Vaporeon", 70, 19, "hydropump");
+    const testTrainer = new CreateTrainer("Ash")
+    expect(testTrainer.pokebelt).toEqual([
+      { pokemon: 'empty' },
+      { pokemon: 'empty' },
+      { pokemon: 'empty' },
+      { pokemon: 'empty' },
+      { pokemon: 'empty' },
+      { pokemon: 'empty' }
+    ])
+    const testTrainer2 = new CreateTrainer("Brock", Flareon, Vaporeon, Flareon, Vaporeon)
+    expect(testTrainer2.pokebelt).toEqual([
+      { pokemon: Flareon },
+      { pokemon: Vaporeon },
+      { pokemon: Flareon },
+      { pokemon: Vaporeon },
+      { pokemon: 'empty' },
+      { pokemon: 'empty' }
+    ])
+  })
+
+  test("catch should update one empty pokeball with the passed pokemon", () => {
+    //arrange
+    const testTrainer = new CreateTrainer("Ash")
+    const Flareon = new FireType("Flareon", 65, 20, "fireblast");
+    //act
+    testTrainer.catch(Flareon)
+    //assert
+    expect(testTrainer.pokebelt).toEqual([
+      { pokemon: Flareon },
+      { pokemon: 'empty' },
+      { pokemon: 'empty' },
+      { pokemon: 'empty' },
+      { pokemon: 'empty' },
+      { pokemon: 'empty' }
+    ])
+  })
+
+  test("catch should update one empty pokeball with the passed pokemon", () => {
+    //arrange
+    const Flareon = new FireType("Flareon", 65, 20, "fireblast");
+    const Vaporeon = new WaterType("Vaporeon", 70, 19, "hydropump");
+    const testTrainer = new CreateTrainer("Ash", Flareon)
+    //act
+    testTrainer.catch(Vaporeon)
+    //assert
+    expect(testTrainer.pokebelt).toEqual([
+      { pokemon: Flareon },
+      { pokemon: Vaporeon },
+      { pokemon: 'empty' },
+      { pokemon: 'empty' },
+      { pokemon: 'empty' },
+      { pokemon: 'empty' }
+    ])
+  })
+
+  test("catch should return a message when all pokeballs are full and leave the pokebelt unchanged", () => {
+    //arrange
+    const Flareon = new FireType("Flareon", 65, 20, "fireblast");
+    const Vaporeon = new WaterType("Vaporeon", 70, 19, "hydropump");
+    const testTrainer = new CreateTrainer("Ash", Flareon, Vaporeon, Flareon, Flareon, Flareon, Flareon)
+    //act
+    testTrainer.catch(Vaporeon)
+    //assert
+    expect(testTrainer.pokebelt).toEqual([
+      { pokemon: Flareon },
+      { pokemon: Vaporeon },
+      { pokemon: Flareon },
+      { pokemon: Flareon },
+      { pokemon: Flareon },
+      { pokemon: Flareon }
+    ])
+  })
+
+  test("getPokemon should return the passed pokemon if it's in the pokebelt", () => {
+    const Flareon = new FireType("Flareon", 65, 20, "fireblast");
+    const testTrainer = new CreateTrainer("Ash", Flareon)
+    expect(testTrainer.getPokemon(Flareon)).toEqual(Flareon)
+  })
+
+  test("getPokemon should return a message if passed pokemon is not in the pokebelt", () => {
+    const Flareon = new FireType("Flareon", 65, 20, "fireblast");
+    const Vaporeon = new WaterType("Vaporeon", 70, 19, "hydropump");
+    const testTrainer = new CreateTrainer("Ash", Vaporeon)
+    expect(testTrainer.getPokemon(Flareon)).toEqual("Pokemon not found!")
+  })
 });
+
+describe(Battle, () => {
+  test("Battle has trainer property", () => {
+    const testBattle = new Battle()
+    expect(testBattle).toHaveProperty("trainer1")
+  })
+
+  test("Battle has trainer property and a value", () => {
+    const testBattle = new Battle("Ash")
+    expect(testBattle).toHaveProperty("trainer1", "Ash")
+  })
+
+  test("Battle has pokemon property", () => {
+    const testBattle = new Battle()
+    expect(testBattle).toHaveProperty("pokemon1")
+  })
+
+  test("Battle has pokemon property and a value", () => {
+    const Flareon = new FireType("Flareon", 65, 20, "fireblast");
+    const testBattle = new Battle("Ash", "Brock", Flareon)
+    expect(testBattle).toHaveProperty("pokemon1", Flareon)
+  })
+
+  // test("defending pokemon should lose the correct amount of health when hit by attacking pokemon", () => {
+  //   const Flareon = new FireType("Flareon", 65, 20, "fireblast");
+  //   const Vaporeon = new WaterType("Vaporeon", 70, 19, "hydropump");
+  //   const testBattle = new Battle("Ash", "Brock", Flareon, Vaporeon)
+  //   testBattle.fight()
+  //   expect(Vaporeon.hitPoints).toEqual(50)
+  // })
+
+  // test("attacking pokemon should lose the correct amount of health when hit by defending pokemon", () => {
+  //   const Flareon = new FireType("Flareon", 65, 20, "fireblast");
+  //   const Vaporeon = new WaterType("Vaporeon", 70, 19, "hydropump");
+  //   const testBattle = new Battle("Ash", "Brock", Flareon, Vaporeon)
+  //   testBattle.fight()
+  //   expect(Flareon.hitPoints).toEqual(46)
+  // })
+
+  test("fight should stop when one pokemon has 0 hitPoints", () => {
+    const Flareon = new FireType("Flareon", 65, 20, "fireblast");
+    const Vaporeon = new WaterType("Vaporeon", 70, 19, "hydropump");
+    const testBattle = new Battle("Ash", "Brock", Flareon, Vaporeon)
+    testBattle.fight()
+    expect(Vaporeon.hasFainted()).toEqual(true)
+  })
+})

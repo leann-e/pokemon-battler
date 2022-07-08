@@ -46,7 +46,7 @@ class CreatePokemon {
     return this.attackDamage;
   }
   hasFainted() {
-    return this.hitPoints === 0;
+    return this.hitPoints <= 0;
   }
 }
 
@@ -135,15 +135,64 @@ class CreatePokeball {
   }
 }
 class CreateTrainer {
-  constructor(ball1, ball2, ball3, ball4, ball5, ball6) {
-    this.ball1 = ball1;
-    this.ball2 = ball2;
-    this.ball3 = ball3;
-    this.ball4 = ball4;
-    this.ball5 = ball5;
-    this.ball6 = ball6;
+  constructor(name, pokemon1, pokemon2, pokemon3, pokemon4, pokemon5, pokemon6) {
+    this.name = name;
+    this.pokebelt = [ 
+      new CreatePokeball(pokemon1),
+      new CreatePokeball(pokemon2),
+      new CreatePokeball(pokemon3),
+      new CreatePokeball(pokemon4),
+      new CreatePokeball(pokemon5),
+      new CreatePokeball(pokemon6)
+    ]
+  }
+
+  catch(pokemon) {
+    for (let i = 0; i < this.pokebelt.length; i++) {
+      if (this.pokebelt[i].pokemon === 'empty') {
+      this.pokebelt[i].throw(pokemon)
+      return this.pokebelt
+      }
+    } console.log(`No empty pokeballs!`)
+  }
+
+  getPokemon(pokemon) {
+    for (let i = 0; i < this.pokebelt.length; i++) {
+      if (this.pokebelt[i].pokemon === pokemon) {
+      this.pokebelt[i].throw(pokemon)
+      return this.pokebelt[i].pokemon
+      } return "Pokemon not found!"
+    }
   }
 }
+
+class Battle {
+  constructor(trainer1, trainer2, pokemon1, pokemon2) {
+    this.trainer1 = trainer1
+    this.trainer2 = trainer2
+    this.pokemon1 = pokemon1
+    this.pokemon2 = pokemon2
+  }
+
+  fight() {
+    for (let i = 0; this.pokemon2.hitPoints > 0 && this.pokemon1.hitPoints > 0; i++ ) {
+    this.pokemon2.takeDamage(this.pokemon1.attackDamage)
+    if (this.pokemon2.hasFainted()) {
+      return this.pokemon2.hasFainted()
+    }
+    this.pokemon1.takeDamage(this.pokemon2.attackDamage)
+    if (this.pokemon1.hasFainted()) {
+      return this.pokemon1.hasFainted()
+    }
+    }
+  }
+}
+const Flareon = new FireType("Flareon", 65, 20, "fireblast");
+const pokeball = new CreatePokeball()
+console.log(pokeball.throw(Flareon))
+
+// const testTrainer = new CreateTrainer("Ash")
+// console.log(testTrainer)
 
 module.exports = {
   CreatePokemon,
@@ -156,4 +205,5 @@ module.exports = {
   Rattata,
   CreatePokeball,
   CreateTrainer,
+  Battle
 };
