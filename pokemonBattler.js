@@ -102,11 +102,6 @@ class Rattata extends CreatePokemon {
   }
 }
 
-// const Eevee = new CreatePokemon("Eevee", "normal", 55, 18, "headbutt");
-// const Flareon = new CreatePokemon("Flareon", "fire", 65, 20, "fireblast");
-// const Vaporeon = new CreatePokemon("Vaporeon", "water", 70, 19, "hydropump");
-// const Leafeon = new CreatePokemon("Leafeon", "grass", 65, 17, "gigadrain");
-
 class CreatePokeball {
   constructor(pokemon = "empty") {
     this.pokemon = pokemon;
@@ -135,64 +130,75 @@ class CreatePokeball {
   }
 }
 class CreateTrainer {
-  constructor(name, pokemon1, pokemon2, pokemon3, pokemon4, pokemon5, pokemon6) {
+  constructor(
+    name,
+    pokemon1,
+    pokemon2,
+    pokemon3,
+    pokemon4,
+    pokemon5,
+    pokemon6
+  ) {
     this.name = name;
-    this.pokebelt = [ 
+    this.pokebelt = [
       new CreatePokeball(pokemon1),
       new CreatePokeball(pokemon2),
       new CreatePokeball(pokemon3),
       new CreatePokeball(pokemon4),
       new CreatePokeball(pokemon5),
-      new CreatePokeball(pokemon6)
-    ]
+      new CreatePokeball(pokemon6),
+    ];
   }
 
   catch(pokemon) {
     for (let i = 0; i < this.pokebelt.length; i++) {
-      if (this.pokebelt[i].pokemon === 'empty') {
-      this.pokebelt[i].throw(pokemon)
-      return this.pokebelt
+      if (this.pokebelt[i].pokemon === "empty") {
+        this.pokebelt[i].throw(pokemon);
+        return this.pokebelt;
       }
-    } console.log(`No empty pokeballs!`)
+    }
+    console.log(`No empty pokeballs!`);
   }
 
   getPokemon(pokemon) {
     for (let i = 0; i < this.pokebelt.length; i++) {
       if (this.pokebelt[i].pokemon === pokemon) {
-      this.pokebelt[i].throw(pokemon)
-      return this.pokebelt[i].pokemon
-      } return "Pokemon not found!"
+        this.pokebelt[i].throw(pokemon);
+        return this.pokebelt[i].pokemon;
+      }
+      return "Pokemon not found!";
     }
   }
 }
 
 class Battle {
   constructor(trainer1, trainer2, pokemon1, pokemon2) {
-    this.trainer1 = trainer1
-    this.trainer2 = trainer2
-    this.pokemon1 = pokemon1
-    this.pokemon2 = pokemon2
+    this.trainer1 = trainer1;
+    this.trainer2 = trainer2;
+    this.pokemon1 = pokemon1;
+    this.pokemon2 = pokemon2;
   }
 
   fight() {
-    for (let i = 0; this.pokemon2.hitPoints > 0 && this.pokemon1.hitPoints > 0; i++ ) {
-    this.pokemon2.takeDamage(this.pokemon1.attackDamage)
-    if (this.pokemon2.hasFainted()) {
-      return this.pokemon2.hasFainted()
-    }
-    this.pokemon1.takeDamage(this.pokemon2.attackDamage)
-    if (this.pokemon1.hasFainted()) {
-      return this.pokemon1.hasFainted()
-    }
+    for (
+      let i = 0;
+      this.pokemon2.hitPoints > 0 && this.pokemon1.hitPoints > 0;
+      i++
+    ) {
+      this.pokemon2.takeDamage(this.pokemon1.attackDamage);
+      if (this.pokemon2.hasFainted()) {
+        return this.pokemon2.hasFainted();
+      }
+      this.pokemon1.takeDamage(this.pokemon2.attackDamage);
+      if (this.pokemon1.hasFainted()) {
+        return this.pokemon1.hasFainted();
+      }
     }
   }
 }
 const Flareon = new FireType("Flareon", 65, 20, "fireblast");
-const pokeball = new CreatePokeball()
-console.log(pokeball.throw(Flareon))
-
-// const testTrainer = new CreateTrainer("Ash")
-// console.log(testTrainer)
+const pokeball = new CreatePokeball();
+console.log(pokeball.throw(Flareon));
 
 module.exports = {
   CreatePokemon,
@@ -205,5 +211,5 @@ module.exports = {
   Rattata,
   CreatePokeball,
   CreateTrainer,
-  Battle
+  Battle,
 };
